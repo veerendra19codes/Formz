@@ -6,6 +6,7 @@ import { ThemeProvider } from "../components/providers/ThemeProvider";
 import { Toaster } from "@/components/ui/toaster";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
 import Logo from "@/components/Logo";
+import DesignerContextProvider from "@/components/contexts/DesignerContext";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -38,24 +39,25 @@ export default function RootLayout({
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
           {/* Wrap client-side components in ThemeProvider */}
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-            <div className="flex flex-col min-h-screen min-w-full bg-background max-h-screen">
-              <nav className="flex justify-between border-b items-center border-border h-[60px] px-4 py-2">
-                <Logo />
-                <div className="flex gap-4 items-center">
-                  <ThemeSwitcher />
-                  <UserButton afterSwitchSessionUrl='/sign-in' />
-                </div>
-              </nav>
-              <main className="flex w-full flex-grow">
-                {children}
-                <Toaster />
-              </main>
-            </div>
-            {/* <main className="px-8">
-              {children}
-            </main> */}
-          </ThemeProvider>
+          <DesignerContextProvider>
+
+            <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+              <div className="flex flex-col min-h-screen min-w-full bg-background max-h-screen">
+                <nav className="flex justify-between border-b items-center border-border h-[60px] px-4 py-2">
+                  <Logo />
+                  <div className="flex gap-4 items-center">
+                    <ThemeSwitcher />
+                    <UserButton afterSwitchSessionUrl='/sign-in' />
+                  </div>
+                </nav>
+                <main className="flex size-full flex-grow">
+                  {children}
+                  <Toaster />
+                </main>
+              </div>
+
+            </ThemeProvider>
+          </DesignerContextProvider>
         </body>
       </html>
     </ClerkProvider>

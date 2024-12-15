@@ -3,18 +3,15 @@ import FormBuilder from '@/components/FormBuilder';
 import React from 'react'
 
 async function BuilderPage({ params, }: {
-    params: {
-        id: string;
-    }
+    params: Promise<{ id: string }>
 }) {
-    const { id } = params;
+    const id = (await params).id;
     const form = await GetFormById(Number(id));
     if (!form) {
         throw new Error("Form not found");
     }
     return (
-        <div>
-            {/* {form.name} */}
+        <div className="size-full flex-grow">
             <FormBuilder form={form} />
         </div>
     )

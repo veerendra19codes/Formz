@@ -1,6 +1,5 @@
 import React from "react";
 import { TextFieldFormElement } from "./fields/TextField";
-import { IconType } from "react-icons/lib";
 
 export type ElementsType = "TextField";
 
@@ -10,11 +9,13 @@ export type FormElement = {
     construct: (id: string) => FormElementInstance;
 
     designerBtnElement: {
-        icon: IconType;
+        icon: React.ElementType;
         label: string;
     }
 
-    designerComponent: React.FC;
+    designerComponent: React.FC<{
+        elementInstance: FormElementInstance;
+    }>;
     formComponent: React.FC;
     propertiesComponent: React.FC;
 }

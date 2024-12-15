@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react'
 
 function layout({ children }: { children: ReactNode }) {
     return (
-        <div className="flex size-full flex-grow mx-auto">
+        <div className="flex flex-grow mx-auto">
             {children}
         </div>
     )
