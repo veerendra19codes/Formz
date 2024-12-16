@@ -1,3 +1,5 @@
+"use server";
+
 import prisma from "@/lib/prisma";
 import { currentUser } from "@clerk/nextjs/server";
 
@@ -28,6 +30,24 @@ export async function GetFormById(id: number) {
         where: {
             userId: user.id,
             id
+        }
+    })
+}
+
+export async function UpdateFormContent(id: number, jsonContent: string) {
+    const user = await currentUser();
+
+    if (!user) {
+        throw new Error("user not found");
+    }
+
+    return await prisma.form.update({
+        where: {
+            userId: user.id,
+            id,
+        },
+        data: {
+            content: jsonContent
         }
     })
 }
