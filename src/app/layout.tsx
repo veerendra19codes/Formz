@@ -7,6 +7,7 @@ import { Toaster } from "@/components/ui/toaster";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
 import Logo from "@/components/Logo";
 import DesignerContextProvider from "@/components/contexts/DesignerContext";
+import NextTopLoader from "nextjs-toploader";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -38,6 +39,7 @@ export default function RootLayout({
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
+          <NextTopLoader />
           {/* Wrap client-side components in ThemeProvider */}
           <DesignerContextProvider>
 
