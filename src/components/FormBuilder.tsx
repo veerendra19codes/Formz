@@ -12,7 +12,7 @@ import useDesigner from './hooks/useDesigner';
 import { ImSpinner2 } from 'react-icons/im';
 import { Input } from './ui/input';
 import Link from 'next/link';
-import { BsArrowLeft } from 'react-icons/bs';
+import { BsArrowLeft, BsArrowRight } from 'react-icons/bs';
 import { toast } from '@/hooks/use-toast';
 import { Button } from './ui/button';
 import Confetti from "react-confetti";
@@ -44,7 +44,7 @@ function FormBuilder({ form }: { form: Form }) {
         const readyTimeout = setTimeout(() => setIsReady(true), 500);
 
         return () => clearTimeout(readyTimeout);
-    }, [form, setElements])
+    }, [form, setElements, isReady])
 
     if (!isReady) {
         return (
@@ -91,8 +91,8 @@ function FormBuilder({ form }: { form: Form }) {
                             </Button>
                             <Button variant={"link"} asChild>
                                 <Link href={`/forms/${form.id}`} className="gap-2">
-                                    <BsArrowLeft />
-                                    Go back home </Link>
+                                    Form details </Link>
+                                <BsArrowRight />
                             </Button>
                         </div>
                     </div>
