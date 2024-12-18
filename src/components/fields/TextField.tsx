@@ -1,13 +1,13 @@
 "use client";
 
 import { MdTextFields } from "react-icons/md";
-import { ElementsType, FormElement, FormElementInstance } from "../FormElements";
+import { ElementsType, FormElement, FormElementInstance, submitFunction } from "../FormElements";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import useDesigner from "../hooks/useDesigner";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { Switch } from "../ui/switch";
@@ -48,7 +48,7 @@ type CustomInstance = FormElementInstance & {
     extraAttributes: typeof extraAttributes;
 }
 
-type propertiesFormSchemaType = s.infer<typeof propertiesSchema>;
+type propertiesFormSchemaType = z.infer<typeof propertiesSchema>;
 function PropertiesComponent({
     elementInstance
 }: {
@@ -186,11 +186,15 @@ function DesignerComponent({
 
 function FormComponent({
     elementInstance,
+    submitValue,
 }: {
-    elementInstance: FormElementInstance
+    elementInstance: FormElementInstance,
+    submitValue?: submitFunction
 }) {
     const element = elementInstance as CustomInstance;
     const { label, required, placeHolder, helperText } = element.extraAttributes;
+
+    const [value, setValue] = useState("");
 
     return (
         <div className="flex flex-col gap-2 w-full">
@@ -198,7 +202,10 @@ function FormComponent({
                 {label}
                 {required && "*"}
             </Label>
-            <Input placeholder={placeHolder} />
+            <Input placeholder={placeHolder} onChange={(e) => setValue(e.target.value)} onBlur={(e) => {
+                if (!submitValue) return;
+                submitValue(element.id, e.target.value)
+            }} value={value} />
             {helperText && (
                 <p className="text-muted-foreground text-[0.8rem]">{helperText}</p>
             )}
