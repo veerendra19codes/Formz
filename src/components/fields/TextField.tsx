@@ -23,10 +23,10 @@ const extraAttributes = {
 }
 
 const propertiesSchema = z.object({
-    label: z.string().min(2).max(5),
+    label: z.string().min(2).max(50),
     helperText: z.string().max(200),
     required: z.boolean().default(false),
-    placeHolder: z.string().max(5),
+    placeHolder: z.string().max(50),
 })
 
 export const TextFieldFormElement: FormElement = {
@@ -50,7 +50,7 @@ export const TextFieldFormElement: FormElement = {
         if (element.extraAttributes.required) {
             return currentValue.length > 0;
         }
-        return false;
+        return true;
     }
 }
 
@@ -59,12 +59,14 @@ type CustomInstance = FormElementInstance & {
 }
 
 type propertiesFormSchemaType = z.infer<typeof propertiesSchema>;
+
 function PropertiesComponent({
     elementInstance
 }: {
     elementInstance: FormElementInstance
 }) {
     const element = elementInstance as CustomInstance;
+
     const { updateElement } = useDesigner();
 
     const form = useForm<propertiesFormSchemaType>({
@@ -95,6 +97,7 @@ function PropertiesComponent({
             }
         })
     }
+
     return (
         <Form {...form}>
             <form onBlur={form.handleSubmit(applyChanges)} onSubmit={(e) => {
@@ -132,7 +135,7 @@ function PropertiesComponent({
                     </FormItem>
                 )}
                 />
-                <FormField control={form.control} name="helpterText" render={({ field }) => (
+                <FormField control={form.control} name="helperText" render={({ field }) => (
                     <FormItem>
                         <FormLabel>Helper test</FormLabel>
                         <FormControl>
@@ -206,9 +209,9 @@ function FormComponent({
     defaultValue?: string,
 }) {
     const element = elementInstance as CustomInstance;
+
     const { label, required, placeHolder, helperText } = element.extraAttributes;
     const [error, setError] = useState(false);
-
     const [value, setValue] = useState(defaultValue || "");
 
     useEffect(() => {

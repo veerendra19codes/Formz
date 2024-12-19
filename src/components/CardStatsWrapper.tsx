@@ -10,7 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Skeleton } from "./ui/skeleton";
 
 function CardStatsWrapper() {
-    const [stats, setStats] = useState<DataType>({
+    const [stats] = useState<DataType>({
         visits: 0,
         submissionRate: 0,
         submissions: 0,
@@ -50,7 +50,7 @@ interface StatsCardsProps {
     loading: boolean;
 }
 
-export function StatsCards(props: StatsCardProps) {
+export function StatsCards(props: StatsCardsProps) {
     const { data, loading } = props;
 
     return (
@@ -67,12 +67,12 @@ export function StatsCards(props: StatsCardProps) {
 }
 
 interface StatsCardProps {
-    title: string;
-    value: string;
-    helperText: string;
-    className: string;
-    loading: boolean;
-    icon: ReactNode;
+    title?: string;
+    value?: string;
+    helperText?: string;
+    className?: string;
+    loading?: boolean;
+    icon?: ReactNode;
 }
 
 export function StatsCard({ title, value, helperText, className, loading, icon }: StatsCardProps) {

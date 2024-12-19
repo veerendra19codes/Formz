@@ -21,6 +21,7 @@ function SaveFormBtn({ id }: { id: number }) {
                 description: "Your form has been saved"
             });
         } catch (error) {
+            console.log("error:", error);
             toast({
                 title: "error",
                 description: "Something went wrong",
