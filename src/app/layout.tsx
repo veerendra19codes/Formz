@@ -8,6 +8,7 @@ import ThemeSwitcher from "@/components/ThemeSwitcher";
 import Logo from "@/components/Logo";
 import DesignerContextProvider from "@/components/contexts/DesignerContext";
 import NextTopLoader from "nextjs-toploader";
+import { Analytics } from "@vercel/analytics/react"
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -55,6 +56,7 @@ export default function RootLayout({
                 <main className="flex size-full flex-grow">
                   {children}
                   <Toaster />
+                  <Analytics />
                 </main>
               </div>
 
