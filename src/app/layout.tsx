@@ -45,8 +45,8 @@ export default function RootLayout({
           <DesignerContextProvider>
 
             <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-              <div className="flex flex-col min-h-screen min-w-full bg-background max-h-screen">
-                <nav className="flex justify-between border-b items-center border-border h-[60px] px-4 py-2">
+              <div className="flex flex-col min-h-screen min-w-full bg-background justify-center items-center">
+                <nav className=" w-full flex justify-between border-b items-center border-border h-[60px] px-4 py-2">
                   <Logo />
                   <div className="flex gap-4 items-center">
                     <ThemeSwitcher />
