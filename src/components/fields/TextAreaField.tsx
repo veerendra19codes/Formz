@@ -12,14 +12,17 @@ import useDesigner from "../hooks/useDesigner";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { Switch } from "../ui/switch";
 import { cn } from "@/lib/utils";
+import { BsTextareaResize } from "react-icons/bs";
+import { Textarea } from "../ui/textarea";
 
-const type: ElementsType = "TextField";
+const type: ElementsType = "TextAreaField";
 
 const extraAttributes = {
-    label: "Text Field",
+    label: "Textarea Field",
     helperText: "Helper text",
     required: false,
     placeHolder: "Value here...",
+    rows: 3,
 }
 
 const propertiesSchema = z.object({
@@ -27,9 +30,10 @@ const propertiesSchema = z.object({
     helperText: z.string().max(200),
     required: z.boolean().default(false),
     placeHolder: z.string().max(50),
+    rows: z.number().min(1).max(10),
 })
 
-export const TextFieldFormElement: FormElement = {
+export const TextAreaFieldFormElement: FormElement = {
     type,
     construct: (id: string) => ({
         id,
@@ -37,8 +41,8 @@ export const TextFieldFormElement: FormElement = {
         extraAttributes,
     }),
     designerBtnElement: {
-        icon: MdTextFields,
-        label: "Text Field",
+        icon: BsTextareaResize,
+        label: "Textarea Field",
     },
     designerComponent: DesignerComponent,
     formComponent: FormComponent,
@@ -76,7 +80,8 @@ function PropertiesComponent({
             label: element.extraAttributes.label,
             helperText: element.extraAttributes.helperText,
             required: element.extraAttributes.required,
-            placeHolder: element.extraAttributes.placeHolder
+            placeHolder: element.extraAttributes.placeHolder,
+            rows: element.extraAttributes.rows,
         }
     })
 
@@ -93,7 +98,8 @@ function PropertiesComponent({
                 label,
                 helperText,
                 required,
-                placeHolder
+                placeHolder,
+                rows
             }
         })
     }
@@ -179,7 +185,7 @@ function DesignerComponent({
     elementInstance: FormElementInstance
 }) {
     const element = elementInstance as CustomInstance;
-    const { label, required, placeHolder, helperText } = element.extraAttributes;
+    const { label, required, placeHolder, helperText, rows } = element.extraAttributes;
 
     return (
         <div className="flex flex-col gap-2 w-full">
@@ -187,7 +193,7 @@ function DesignerComponent({
                 {label}
                 {required && "*"}
             </Label>
-            <Input readOnly disabled placeholder={placeHolder} />
+            <Textarea readOnly disabled placeholder={placeHolder} rows={rows} />
             {helperText && (
                 <p className="text-muted-foreground text-[0.8rem]">{helperText}</p>
             )}

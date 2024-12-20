@@ -2,26 +2,26 @@
 
 import { ElementsType, FormElement, FormElementInstance } from "../FormElements";
 import { Label } from "../ui/label";
-import { Input } from "../ui/input";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import useDesigner from "../hooks/useDesigner";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
-import { LuHeading2 } from "react-icons/lu";
+import { LuSeparatorHorizontal } from "react-icons/lu";
+import { Slider } from "../ui/slider";
 
-const type: ElementsType = "SubTitleField";
+const type: ElementsType = "SpacerField";
 
 const extraAttributes = {
-    title: "SubTitle field",
+    height: 20, //px
 }
 
 const propertiesSchema = z.object({
-    title: z.string().min(2).max(100),
+    height: z.number().min(5).max(200),
 })
 
-export const SubTitleFieldFormElement: FormElement = {
+export const SpacerFieldFormElement: FormElement = {
     type,
     construct: (id: string) => ({
         id,
@@ -29,8 +29,8 @@ export const SubTitleFieldFormElement: FormElement = {
         extraAttributes,
     }),
     designerBtnElement: {
-        icon: LuHeading2,
-        label: "SubTitle Field",
+        icon: LuSeparatorHorizontal,
+        label: "Spacer Field",
     },
     designerComponent: DesignerComponent,
     formComponent: FormComponent,
@@ -57,7 +57,7 @@ function PropertiesComponent({
         resolver: zodResolver(propertiesSchema),
         mode: "onBlur",
         defaultValues: {
-            title: element.extraAttributes.title,
+            height: element.extraAttributes.height,
         }
     })
 
@@ -66,12 +66,12 @@ function PropertiesComponent({
     }, [element, form])
 
     function applyChanges(values: propertiesFormSchemaType) {
-        const { title } = values;
+        const { height } = values;
 
         updateElement(element.id, {
             ...element,
             extraAttributes: {
-                title,
+                height,
             }
         })
     }
@@ -80,14 +80,13 @@ function PropertiesComponent({
             <form onBlur={form.handleSubmit(applyChanges)} onSubmit={(e) => {
                 e.preventDefault();
             }} className="space-y-3">
-                <FormField control={form.control} name="title" render={({ field }) => (
+                <FormField control={form.control} name="height" render={({ field }) => (
                     <FormItem>
-                        <FormLabel>Title</FormLabel>
-                        <FormControl>
-                            <Input {...field} onKeyDown={(e) => {
-                                if (e.key === "Enter") e.currentTarget.blur();
-                            }}
-                            />
+                        <FormLabel>Height (px): {form.watch("height")}</FormLabel>
+                        <FormControl className="pt-2">
+                            <Slider defaultValue={[field.value]} min={5} max={200} step={1} onValueChange={(value) => {
+                                field.onChange(value[0])
+                            }} />
                         </FormControl>
                         <FormMessage />
                     </FormItem>
@@ -105,14 +104,14 @@ function DesignerComponent({
     elementInstance: FormElementInstance
 }) {
     const element = elementInstance as CustomInstance;
-    const { title } = element.extraAttributes;
+    const { height } = element.extraAttributes;
 
     return (
-        <div className="flex flex-col gap-2  w-full">
+        <div className="flex flex-col gap-2 w-full items-center">
             <Label className="text-muted-foreground">
-                SubTitle field
+                Spacer field: {height} px
             </Label>
-            <p className="text-lg">{title}</p>
+            <LuSeparatorHorizontal className="wize-8" />
         </div>
     )
 }
@@ -125,9 +124,9 @@ function FormComponent({
     elementInstance: FormElementInstance,
 }) {
     const element = elementInstance as CustomInstance;
-    const { title } = element.extraAttributes;
+    const { height } = element.extraAttributes;
 
     return (
-        <p className="text-lg">{title}</p>
+        <div style={{ height, width: "100%" }}></div>
     )
 }

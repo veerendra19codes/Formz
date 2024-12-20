@@ -2,26 +2,26 @@
 
 import { ElementsType, FormElement, FormElementInstance } from "../FormElements";
 import { Label } from "../ui/label";
-import { Input } from "../ui/input";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import useDesigner from "../hooks/useDesigner";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
-import { LuHeading2 } from "react-icons/lu";
+import { BsParagraph } from "react-icons/bs";
+import { Textarea } from "../ui/textarea";
 
-const type: ElementsType = "SubTitleField";
+const type: ElementsType = "ParagraphField";
 
 const extraAttributes = {
-    title: "SubTitle field",
+    text: "Text here",
 }
 
 const propertiesSchema = z.object({
-    title: z.string().min(2).max(100),
+    text: z.string().min(2).max(500),
 })
 
-export const SubTitleFieldFormElement: FormElement = {
+export const ParagraphFieldFormElement: FormElement = {
     type,
     construct: (id: string) => ({
         id,
@@ -29,8 +29,8 @@ export const SubTitleFieldFormElement: FormElement = {
         extraAttributes,
     }),
     designerBtnElement: {
-        icon: LuHeading2,
-        label: "SubTitle Field",
+        icon: BsParagraph,
+        label: "Paragraph Field",
     },
     designerComponent: DesignerComponent,
     formComponent: FormComponent,
@@ -57,7 +57,7 @@ function PropertiesComponent({
         resolver: zodResolver(propertiesSchema),
         mode: "onBlur",
         defaultValues: {
-            title: element.extraAttributes.title,
+            text: element.extraAttributes.text,
         }
     })
 
@@ -66,12 +66,12 @@ function PropertiesComponent({
     }, [element, form])
 
     function applyChanges(values: propertiesFormSchemaType) {
-        const { title } = values;
+        const { text } = values;
 
         updateElement(element.id, {
             ...element,
             extraAttributes: {
-                title,
+                text,
             }
         })
     }
@@ -80,11 +80,11 @@ function PropertiesComponent({
             <form onBlur={form.handleSubmit(applyChanges)} onSubmit={(e) => {
                 e.preventDefault();
             }} className="space-y-3">
-                <FormField control={form.control} name="title" render={({ field }) => (
+                <FormField control={form.control} name="text" render={({ field }) => (
                     <FormItem>
-                        <FormLabel>Title</FormLabel>
+                        <FormLabel>Paragraph</FormLabel>
                         <FormControl>
-                            <Input {...field} onKeyDown={(e) => {
+                            <Textarea rows={5} {...field} onKeyDown={(e) => {
                                 if (e.key === "Enter") e.currentTarget.blur();
                             }}
                             />
@@ -105,14 +105,14 @@ function DesignerComponent({
     elementInstance: FormElementInstance
 }) {
     const element = elementInstance as CustomInstance;
-    const { title } = element.extraAttributes;
+    const { text } = element.extraAttributes;
 
     return (
-        <div className="flex flex-col gap-2  w-full">
+        <div className="flex flex-col gap-2 w-full">
             <Label className="text-muted-foreground">
-                SubTitle field
+                Paragraph field
             </Label>
-            <p className="text-lg">{title}</p>
+            <p>{text}</p>
         </div>
     )
 }
@@ -125,9 +125,9 @@ function FormComponent({
     elementInstance: FormElementInstance,
 }) {
     const element = elementInstance as CustomInstance;
-    const { title } = element.extraAttributes;
+    const { text } = element.extraAttributes;
 
     return (
-        <p className="text-lg">{title}</p>
+        <p>{text}</p>
     )
 }
