@@ -18,7 +18,7 @@ import { Button } from './ui/button';
 import Confetti from "react-confetti";
 
 function FormBuilder({ form }: { form: Form }) {
-    const { setElements } = useDesigner();
+    const { setElements, setSelectedElement } = useDesigner();
     const [isReady, setIsReady] = useState(false);
 
     const mouseSensor = useSensor(MouseSensor, {
@@ -38,13 +38,13 @@ function FormBuilder({ form }: { form: Form }) {
 
     useEffect(() => {
         if (isReady) return;
-
+        setSelectedElement(null);
         const elements = JSON.parse(form.content);
         setElements(elements);
         const readyTimeout = setTimeout(() => setIsReady(true), 500);
 
         return () => clearTimeout(readyTimeout);
-    }, [form, setElements, isReady])
+    }, [form, setElements, isReady, setSelectedElement])
 
     if (!isReady) {
         return (

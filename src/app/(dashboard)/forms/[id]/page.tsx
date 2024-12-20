@@ -2,9 +2,11 @@ import { GetFormById, GetFormWithSubmissions } from '@/actions/form';
 import { StatsCard } from '@/components/CardStatsWrapper';
 import { ElementsType, FormElementInstance } from '@/components/FormElements';
 import FormLinkShare from '@/components/FormLinkShare';
+import { Badge } from '@/components/ui/badge';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import VisitBtn from '@/components/VisitBtn';
-import { formatDistance } from 'date-fns';
+import { format, formatDistance } from 'date-fns';
 import React, { ReactNode } from 'react'
 import { FaWpforms } from 'react-icons/fa';
 import { HiCursorClick } from 'react-icons/hi';
@@ -86,6 +88,12 @@ async function SubmissionsTable({ id }: { id: number }) {
     formElements.forEach((element) => {
         switch (element.type) {
             case "TextField":
+            case "DateField":
+            case "SelectField":
+            case "DateField":
+            case "TextAreaField":
+            case "CheckboxField":
+
                 columns.push({
                     id: element.id,
                     label: element.extraAttributes?.label,
@@ -129,7 +137,7 @@ async function SubmissionsTable({ id }: { id: number }) {
                         {rows.map((row, index) => (
                             <TableRow key={index}>
                                 {columns.map((column) => (
-                                    <RowCell key={column.id} value={row[column.id]} />
+                                    <RowCell type={column.type} key={column.id} value={row[column.id]} />
                                 ))}
                                 <TableCell className="text-muted-foreground text-right">
                                     {formatDistance(row.submittedAt, new Date(), {
@@ -145,8 +153,21 @@ async function SubmissionsTable({ id }: { id: number }) {
     )
 }
 
-function RowCell({ value }: { value: string }) {
-    const node: ReactNode = value;
+function RowCell({ type, value }: { type: string, value: string }) {
+    let node: ReactNode = value;
+
+    switch (type) {
+        case "DateField":
+            if (!value) break;
+            const date = new Date(value);
+            node = <Badge variant={"outline"}>{format(date, "dd/MM/yyyy")}</Badge>;
+            break;
+
+        case "CheckboxField":
+            const checked = value === "true";
+            node = <Checkbox checked={checked} disabled />
+            break;
+    }
 
     return <TableCell>{node}</TableCell>
 }

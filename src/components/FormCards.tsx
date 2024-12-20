@@ -45,7 +45,7 @@ function FormCards() {
 
     return (
         <>
-            {forms.map((form) => (
+            {forms.length > 0 && forms?.map((form) => (
                 <FormCard key={form.id} form={form} />
             ))}
         </>
