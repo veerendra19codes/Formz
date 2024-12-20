@@ -40,12 +40,10 @@ export default function RootLayout({
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
-          <NextTopLoader />
-          {/* Wrap client-side components in ThemeProvider */}
           <DesignerContextProvider>
-
             <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
               <div className="flex flex-col min-h-screen min-w-full bg-background justify-center items-center">
+                <NextTopLoader />
                 <nav className=" w-full flex justify-between border-b items-center border-border h-[60px] px-4 py-2">
                   <Logo />
                   <div className="flex gap-4 items-center">
@@ -59,7 +57,6 @@ export default function RootLayout({
                   <Analytics />
                 </main>
               </div>
-
             </ThemeProvider>
           </DesignerContextProvider>
         </body>

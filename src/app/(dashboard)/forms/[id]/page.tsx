@@ -1,5 +1,6 @@
 import { GetFormById, GetFormWithSubmissions } from '@/actions/form';
 import { StatsCard } from '@/components/CardStatsWrapper';
+import DownloadButton from '@/components/DownloadBtn';
 import { ElementsType, FormElementInstance } from '@/components/FormElements';
 import FormLinkShare from '@/components/FormLinkShare';
 import { Badge } from '@/components/ui/badge';
@@ -143,6 +144,9 @@ async function SubmissionsTable({ id }: { id: number }) {
                                     {formatDistance(row.submittedAt, new Date(), {
                                         addSuffix: true,
                                     })}
+                                </TableCell>
+                                <TableCell className="text-muted-foreground text-right">
+                                    <DownloadButton row={row} columns={columns} />
                                 </TableCell>
                             </TableRow>
                         ))}

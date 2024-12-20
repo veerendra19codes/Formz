@@ -97,7 +97,7 @@ function Designer() {
         }
     })
 
-    console.log("ELEMENTS:", elements);
+    // console.log("ELEMENTS:", elements);
     return (
         <div className="flex size-full">
             <div className="p-4 w-full" onClick={() => {

@@ -10,7 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Skeleton } from "./ui/skeleton";
 
 function CardStatsWrapper() {
-    const [stats] = useState<DataType>({
+    const [stats, setStats] = useState<DataType>({
         visits: 0,
         submissionRate: 0,
         submissions: 0,
@@ -24,6 +24,18 @@ function CardStatsWrapper() {
                 console.log("res:", res);
 
                 // TODO setStats 
+                const { visits, submissions } = res.data;
+
+                const submissionRate = visits > 0 ? (submissions / visits) * 100 : 0;
+                const bounceRate = 100 - submissionRate;
+
+                setStats({
+                    visits,
+                    submissions,
+                    submissionRate,
+                    bounceRate,
+                });
+
             } catch (error) {
                 console.log("error in fetching stats:", error);
             }
