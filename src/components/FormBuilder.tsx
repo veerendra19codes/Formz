@@ -60,7 +60,7 @@ function FormBuilder({ form }: { form: Form }) {
         return (
             <>
                 <Confetti width={window.innerWidth} height={window.innerHeight} recycle={false} numberOfPieces={1000} />
-                <div className="flex flex-col items-center justify-center size-full">
+                <div className="flex flex-col items-center justify-center size-full relative m-auto">
                     <div className="max-w-md">
                         <h1 className="text-center text-4xl font-bold text-primary border-b pb-3 mb-10">
                             Form published !!!
@@ -84,12 +84,12 @@ function FormBuilder({ form }: { form: Form }) {
                             </Button>
                         </div>
                         <div className="flex justify-between">
-                            <Button variant={"link"} asChild>
+                            <Button variant={"link"}>
                                 <Link href={"/"} className="gap-2">
                                     <BsArrowLeft />
                                     Go back home </Link>
                             </Button>
-                            <Button variant={"link"} asChild>
+                            <Button variant={"link"}>
                                 <Link href={`/forms/${form.id}`} className="gap-2">
                                     Form details </Link>
                                 <BsArrowRight />
@@ -101,34 +101,38 @@ function FormBuilder({ form }: { form: Form }) {
         )
     }
 
-
-    return (
-        <DndContext sensors={sensors}>
-            <main className="flex flex-col size-full flex-grow">
-                <nav className="flex justify-between border-b-2 gap-3 p-4 items-center">
-                    <h2 className='truncate font-medium'>
-                        <span className="to-muted-foreground">
-                            Form:
-                        </span>
-                        {form.name}
-                    </h2>
-                    <div className="flex items-center gap-2">
-                        <PreviewDialogBtn />
-                        {!form.published && (
-                            <>
-                                <SaveFormBtn id={form.id} />
-                                <PublishFormBtn id={form.id} />
-                            </>
-                        )}
-                    </div>
-                </nav>
-                <div className="flex size-full  flex-grow items-center justify-center relative overflow-y-auto bg-accent bg-[url(/paper.svg)] dark:bg-[url(/paper-dark.svg)]">
-                    <Designer />
-                </div>
-            </main>
-            <DragOverlayWrapper />
-        </DndContext>
-    )
+    else {
+        return (
+            <>
+                <DndContext sensors={sensors}>
+                    <main className="flex flex-col size-full flex-grow">
+                        <nav className="flex justify-between border-b-2 gap-3 p-4 items-center">
+                            <h2 className='truncate font-medium'>
+                                Form:
+                                <span className="to-muted-foreground">
+                                </span>
+                                {form.name}
+                            </h2>
+                            <div className="flex items-center gap-2">
+                                <PreviewDialogBtn />
+                                {!form.published && (
+                                    <>
+                                        <SaveFormBtn id={form.id} />
+                                        <PublishFormBtn id={form.id} />
+                                    </>
+                                )}
+                            </div>
+                        </nav>
+                        <div className="flex size-full  flex-grow items-center justify-center relative overflow-y-auto bg-accent bg-[url(/paper.svg)] dark:bg-[url(/paper-dark.svg)]">
+                            <Designer />
+                        </div>
+                    </main>
+                    <DragOverlayWrapper />
+                </DndContext>
+            </>
+        );
+    }
 }
 
 export default FormBuilder
+

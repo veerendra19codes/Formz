@@ -12,7 +12,7 @@ function PreviewDialogBtn() {
 
     return (
         <Dialog>
-            <DialogTrigger asChild>
+            <DialogTrigger>
                 <Button variant={"outline"} className="gap-2">
                     <MdPreview className="size-6" />
                     Preview

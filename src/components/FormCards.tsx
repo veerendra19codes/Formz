@@ -2,7 +2,6 @@
 
 import { toast } from '@/hooks/use-toast';
 import { Form } from '@prisma/client';
-import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from './ui/card';
 import { Badge } from "./ui/badge";
@@ -13,16 +12,17 @@ import Link from 'next/link';
 import { BiRightArrowAlt } from "react-icons/bi";
 import { FaEdit } from 'react-icons/fa';
 import { Button } from './ui/button';
+import { GetForms } from '@/actions/form';
 
 function FormCards() {
     const [forms, setForms] = useState<Form[]>([]);
     useEffect(() => {
         const getForms = async () => {
             try {
-                const res = await axios.get("/api/getForms");
-                console.log("res:", res);
-                if (res.status == 200) {
-                    setForms(res.data.forms);
+                const res = await GetForms();
+                // console.log("res:", res);
+                if (res.length > 0) {
+                    setForms(res);
                 }
                 else {
                     toast({
@@ -81,13 +81,13 @@ function FormCard({ form }: { form: Form }) {
         </CardContent>
         <CardFooter>
             {form.published && (
-                <Button asChild className="w-full mt-2 text-md gap-4">
+                <Button className="w-full mt-2 text-md gap-4">
                     <Link href={`/forms/${form.id}`}>
                         View Submissions <BiRightArrowAlt /></Link>
                 </Button>
             )}
             {!form.published && (
-                <Button asChild className="w-full mt-2 text-md gap-4" variant={"secondary"}>
+                <Button className="w-full mt-2 text-md gap-4" variant={"secondary"}>
                     <Link href={`/builder/${form.id}`}>
                         Edit form <FaEdit /></Link>
                 </Button>

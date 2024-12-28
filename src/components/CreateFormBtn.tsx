@@ -11,9 +11,9 @@ import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
 import { formSchema, formSchemaType } from '@/schemas/form';
 import { toast } from '@/hooks/use-toast';
-import axios from 'axios';
 import { BsFileEarmarkPlus } from "react-icons/bs";
 import { useRouter } from 'next/navigation';
+import { createForm } from '@/actions/form';
 
 function CreateFormBtn() {
     const router = useRouter();
@@ -24,14 +24,9 @@ function CreateFormBtn() {
 
     async function onSubmit(values: formSchemaType) {
         try {
-            console.log("values:", values);
-            const res = await axios.post("/api/createform", {
-                values
-            })
-            console.log("res:", res);
-            if (res.status == 200) {
-                const formId = res.data.formId;
-                // console.log("formId:", formId);
+            // console.log("values:", values);
+            const { formId } = await createForm(values);
+            if (formId) {
                 router.push(`/builder/${formId}`)
             }
             else {
@@ -53,7 +48,7 @@ function CreateFormBtn() {
 
     return (
         <Dialog>
-            <DialogTrigger asChild>
+            <DialogTrigger>
                 <Button variant={"outline"} className="group border border-primary/20 h-[190px] items-center justify-center flex flex-col hover:border-primary hover:cursor-pointer border-dashed gap-4">
                     <BsFileEarmarkPlus className="h-8 w-8 text-muted-foreground group-hover:text-primary" />
                     <p className="font-bold text-xl text-muted-foreground group-hover:text-primary">

@@ -1,13 +1,13 @@
 "use client";
 
 import { ReactNode, useEffect, useState } from "react";
-import axios from "axios";
 import { LuView } from "react-icons/lu";
 import { FaWpforms } from "react-icons/fa";
 import { HiCursorClick } from "react-icons/hi";
 import { TbArrowBounce } from "react-icons/tb";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Skeleton } from "./ui/skeleton";
+import { getFormStats } from "@/actions/form";
 
 function CardStatsWrapper() {
     const [stats, setStats] = useState<DataType>({
@@ -20,11 +20,10 @@ function CardStatsWrapper() {
     useEffect(() => {
         const fetchStats = async () => {
             try {
-                const res = await axios.get("/api/form");
-                console.log("res:", res);
-
+                const res = await getFormStats();
+                // console.log("res:", res);
                 // TODO setStats 
-                const { visits, submissions } = res.data;
+                const { visits, submissions } = res;
 
                 const submissionRate = visits > 0 ? (submissions / visits) * 100 : 0;
                 const bounceRate = 100 - submissionRate;

@@ -2,6 +2,81 @@
 
 import prisma from "@/lib/prisma";
 import { currentUser } from "@clerk/nextjs/server";
+import { formSchema } from "@/schemas/form";
+
+export async function getFormStats() {
+    const user = await currentUser();
+
+    if (!user) {
+        // throw new UserNotFoundErr();
+        return { message: "user not found", status: 404, visits: 0, submissionRate: 0, submissions: 0, bounceRate: 0 };
+    }
+
+    const stats = await prisma.form.aggregate({
+        where: {
+            userId: user.id
+        },
+        _sum: {
+            visits: true,
+            submissions: true,
+        }
+    })
+    // console.log('stats', stats);
+
+    const visits = stats._sum.visits || 0; // 0 becoz it can be null also
+    const submissions = stats._sum.submissions || 0;
+
+    let submissionRate = 0;
+
+    if (visits > 0) {
+        submissionRate = (submissions / visits) * 100;
+    }
+
+    const bounceRate = 100 - submissionRate;
+
+    return {
+        visits, submissionRate, submissions, bounceRate
+    };
+}
+
+interface CreateFormProps {
+    name: string,
+    description?: string,
+}
+
+export async function createForm(values: CreateFormProps | undefined) {
+    if (values) {
+
+        const validation = formSchema.safeParse(values);
+
+        if (!validation.success) {
+            throw new Error("form inputs not valid");
+        }
+
+        const user = await currentUser();
+        if (!user) {
+            throw new Error("User not found");
+        }
+
+        const { name, description } = values;
+
+        const form = await prisma.form.create({
+            data: {
+                userId: user.id,
+                name,
+                description,
+            }
+        })
+
+        if (!form) {
+            throw new Error("Error in creating new form");
+        }
+        return { message: "success", formId: form.id };
+    }
+    else {
+        return { message: "error", formId: null }
+    }
+}
 
 export async function GetForms() {
     const user = await currentUser();

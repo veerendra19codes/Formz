@@ -219,7 +219,10 @@ function FormComponent({
                 <PopoverTrigger asChild>
                     <Button variant={'outline'} className={cn("w-full justify-start text-left font-normal", !date && "text-muted-foreground", error && "border-red-500")}>
                         <CalendarIcon className="mr-2 size-4" />
-                        {date ? format(date, "PPP") : <span>Pick a date</span>}</Button>               </PopoverTrigger>
+
+                        {date ? format(date, "PPP") : <span>Pick a date</span>}
+                    </Button>
+                </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start">
                     <Calendar mode="single" selected={date} onSelect={(date) => {
                         setDate(date);
